@@ -30,9 +30,9 @@ jobs:
 
     - name: Export PNG files
       run: |
-        find . \( -iname "*.ai" -o -iname "*.svg" \) -exec sh -c 'DPI=72;  FILE="{}"; inkscape --export-area-drawing --export-dpi=$DPI --export-type=png --export-png="output/${FILE%.*}@$DPI" "{}"' \;
-        find . \( -iname "*.ai" -o -iname "*.svg" \) -exec sh -c 'DPI=150; FILE="{}"; inkscape --export-area-drawing --export-dpi=$DPI --export-type=png --export-png="output/${FILE%.*}@$DPI" "{}"' \;
-        find . \( -iname "*.ai" -o -iname "*.svg" \) -exec sh -c 'DPI=300; FILE="{}"; inkscape --export-area-drawing --export-dpi=$DPI --export-type=png --export-png="output/${FILE%.*}@$DPI" "{}"' \;
+        find . \( -iname "*.ai" -o -iname "*.svg" \) -exec sh -c 'DPI=72;  FILE="{}"; inkscape --export-area-drawing --export-dpi=$DPI --export-type=png --export-filename="output/${FILE%.*}@$DPI.png" "{}"' \;
+        find . \( -iname "*.ai" -o -iname "*.svg" \) -exec sh -c 'DPI=150; FILE="{}"; inkscape --export-area-drawing --export-dpi=$DPI --export-type=png --export-filename="output/${FILE%.*}@$DPI.png" "{}"' \;
+        find . \( -iname "*.ai" -o -iname "*.svg" \) -exec sh -c 'DPI=300; FILE="{}"; inkscape --export-area-drawing --export-dpi=$DPI --export-type=png --export-filename="output/${FILE%.*}@$DPI.png" "{}"' \;
 
     - name: Deploy unoptimised PNGs
       uses: peaceiris/actions-gh-pages@v2.3.1
