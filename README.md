@@ -2,10 +2,6 @@
 
 ---
 
-PNG exports of the Splitify branding resources
+Splitify branding resources.
 
-Resources available at `https://splitify.github.io/branding/<filename>`
-
----
-
-Some time in the future maybe I'll write a HTML page generator for this
+View files at [splitify.github.io/branding](https://splitify.github.io/branding).
