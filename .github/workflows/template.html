@@ -199,15 +199,15 @@
     </div>
   </template>
   <template id="button">
-    <a><div class="button">asdsadasd</div></a>
+    <a><div class="button"></div></a>
   </template>
 
   <script type="application/javascript">
-    // Parent node of a node
     const parentSymbol = Symbol("parent");
     const identitySymbol = Symbol("identity");
 
     function treeBuilder(paths, node = {}) {
+      // Resolve node from given path
       function getNextNode(path) {
         switch (path) {
           case ".":
@@ -216,7 +216,7 @@
           case "..":
             return node[parentSymbol] || node;
           default:
-            // Create reference to node it does not exist
+            // Create reference to a new node it does not exist
             return (
               node[path] ||
               (node[path] = {
@@ -232,18 +232,12 @@
           paths = paths.map((path) => path.split("/"));
         }
 
-        //
-        for (let p of paths) {
-          if (p.length == 0) {
-            throw new Error();
-          }
-        }
-
         // Get files of the current level
         const files = paths.filter((chunks) => chunks.length === 1);
         if (files.length) {
           // Join files of the same DPI
           for (let file of files) {
+            // Extract (name)@(dpi)(.ext)
             const [_, name, dpi, ext] = /(.+?)@(.+?)(\..*)/.exec(file);
             let key = name + ext;
 
