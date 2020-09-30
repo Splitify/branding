@@ -311,9 +311,6 @@
       .then((data) => {
         let files = data.split("\n").filter((l) => l);
         let tree = treeBuilder(files);
-        console.log(JSON.stringify(tree, undefined, 2));
-
-        console.log("crawl");
         treeCrawler(tree);
       });
   </script>
