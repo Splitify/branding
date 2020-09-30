@@ -1,0 +1,57 @@
+name: Generate PNGs
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: "Generate PNGs"
+    runs-on: ubuntu-18.04
+
+    steps:
+    - name: Install packages
+      run: |
+        sudo add-apt-repository universe
+        sudo add-apt-repository ppa:inkscape.dev/stable
+        sudo apt update
+        sudo apt install inkscape
+        # python3
+        # pngcrush
+
+    - name: Checkout repository
+      uses: actions/checkout@2036a08e25fa78bbd946711a407b529a0a1204bf
+
+    - name: Create output directories
+      run: |
+        mkdir -p output
+        find . \( -iname "*.ai" -o -iname "*.svg" \) -exec sh -c 'mkdir -p "output/$(dirname {})"' \;
+
+    - name: Export PNG files
+      run: |
+        find . \( -iname "*.ai" -o -iname "*.svg" \) -exec sh -c 'DPI=72;  FILE="{}"; inkscape --export-area-drawing --export-dpi=$DPI --export-type=png --export-png="output/${FILE%.*}@$DPI" "{}"' \;
+        find . \( -iname "*.ai" -o -iname "*.svg" \) -exec sh -c 'DPI=150; FILE="{}"; inkscape --export-area-drawing --export-dpi=$DPI --export-type=png --export-png="output/${FILE%.*}@$DPI" "{}"' \;
+        find . \( -iname "*.ai" -o -iname "*.svg" \) -exec sh -c 'DPI=300; FILE="{}"; inkscape --export-area-drawing --export-dpi=$DPI --export-type=png --export-png="output/${FILE%.*}@$DPI" "{}"' \;
+
+    - name: Deploy unoptimised PNGs
+      uses: peaceiris/actions-gh-pages@v2.3.1
+      env:
+        PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PUBLISH_BRANCH: gh-pages
+        PUBLISH_DIR: ./output
+
+    # # Andrew decided this was a bad idea though it'd be nice...
+    # # Don't want to reoptimise old files, meaning that I would have to keep track of which svg and ai files were modified
+    # # Then I'd also need to track deleted svg and ai files so the repo sync would be right
+
+    # - name: Optimise PNGs
+    #   continue-on-error: true
+    #   run: find ./output/ -iname "*.png" -exec sh -c 'pngcrush -brute "{}" temp.png; mv temp.png "{}"' \;
+    
+    # - name: Deploy optimised PNGs
+    #   uses: peaceiris/actions-gh-pages@v2.3.1
+    #   env:
+    #     PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     PUBLISH_BRANCH: gh-pages
+    #     PUBLISH_DIR: ./output
