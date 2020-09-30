@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Splitify branding resources" />
+    <title>Splitify | Branding</title>
+
+    <style>
+      :root {
+        --colorA: #4dc088;
+        --colorB: #699fd5;
+      }
+      .gradientAnim {
+        z-index: 0;
+        pointer-events: none;
+        mix-blend-mode: hue;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(146deg, var(--colorA), var(--colorB));
+        background-size: 10000% 10000%;
+        -webkit-animation: GradientAnim 20s ease infinite;
+        -moz-animation: GradientAnim 20s ease infinite;
+        animation: GradientAnim 20s ease infinite;
+      }
+      @-webkit-keyframes GradientAnim {
+        0% {
+          background-position: 0% 46%;
+        }
+        50% {
+          background-position: 100% 55%;
+        }
+        100% {
+          background-position: 0% 46%;
+        }
+      }
+      @-moz-keyframes GradientAnim {
+        0% {
+          background-position: 0% 46%;
+        }
+        50% {
+          background-position: 100% 55%;
+        }
+        100% {
+          background-position: 0% 46%;
+        }
+      }
+      @keyframes GradientAnim {
+        0% {
+          background-position: 0% 46%;
+        }
+        50% {
+          background-position: 100% 55%;
+        }
+        100% {
+          background-position: 0% 46%;
+        }
+      }
+
+      html,
+      body {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        margin: 0;
+        padding: 0;
+
+        font-family: Calibri, sans-serif;
+        font-size: 12px;
+      }
+
+      #container {
+        max-width: 1024px;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.2);
+        margin: 0 auto;
+      }
+      .card {
+        padding: 10px;
+      }
+      .contents {
+        background-color: rgba(255, 255, 255, 0.85);
+        display: flex;
+        flex-direction: row;
+        padding: 20px;
+        border-radius: 20px;
+        max-height: 80px;
+        height: 100vh;
+      }
+      .contents:hover {
+        background-color: rgba(255, 255, 255, 1);
+        cursor: pointer;
+      }
+
+      .nameBlock {
+        margin-top: -20px;
+        margin-bottom: -20px;
+        margin-left: -20px;
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
+        background-color: #5daf34;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      @media screen and (orientation: portrait) {
+        .contents {
+          flex-direction: column;
+          max-height: 300px;
+        }
+        .buttons {
+          margin-top: 5px !important;
+        }
+        .nameBlock {
+          margin-right: -20px;
+          border-radius: 0;
+          border-top-right-radius: 1000vh;
+          border-top-left-radius: 1000vh;
+          margin-bottom: 10px;
+        }
+        img {
+          max-height: 270px;
+        }
+      }
+
+      .name {
+        width: 200px;
+        padding: 2px;
+        text-align: center;
+        color: white;
+      }
+      .imgContainer {
+        flex: 1;
+        z-index: 1;
+        max-height: 100%;
+      }
+      .imgContainer > img {
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+      }
+      a {
+        text-decoration: none;
+      }
+      .buttons {
+        grid-column-gap: 5px;
+        display: flex;
+        align-items: center;
+        margin: 0 auto;
+      }
+      .button {
+        color: #67c23a;
+        background-color: #f0f9eb;
+
+        border: 1px solid #c2e7b0;
+        padding: 5px;
+        border-radius: 5px;
+      }
+
+      .button:hover {
+        color: #ffffff;
+        background: #5daf34;
+        border-color: #5daf34;
+      }
+      .button::after {
+        content: " dpi";
+      }
+    </style>
+    <meta name="author" content="Andrew Wong (featherbear.cc)" />
+  </head>
+  <body>
+    <div id="container"></div>
+    <div class="gradientAnim"></div>
+  </body>
+  <template id="card">
+    <div class="card">
+      <div class="contents">
+        <div class="nameBlock">
+          <span class="name"></span>
+        </div>
+        <div class="imgContainer">
+          <img />
+        </div>
+        <div class="buttons"></div>
+      </div>
+    </div>
+  </template>
+  <template id="button">
+    <a><div class="button">asdsadasd</div></a>
+  </template>
+
+  <script type="application/javascript">
+    // Parent node of a node
+    const parentSymbol = Symbol("parent");
+    const identitySymbol = Symbol("identity");
+
+    function treeBuilder(paths, node = {}) {
+      function getNextNode(path) {
+        switch (path) {
+          case ".":
+          case "":
+            return node;
+          case "..":
+            return node[parentSymbol] || node;
+          default:
+            // Create reference to node it does not exist
+            return (
+              node[path] ||
+              (node[path] = {
+                [parentSymbol]: node,
+                [identitySymbol]: path,
+              })
+            );
+        }
+      }
+
+      if (paths.length) {
+        if (!Array.isArray(paths[0])) {
+          paths = paths.map((path) => path.split("/"));
+        }
+
+        //
+        for (let p of paths) {
+          if (p.length == 0) {
+            throw new Error();
+          }
+        }
+
+        // Get files of the current level
+        const files = paths.filter((chunks) => chunks.length === 1);
+        if (files.length) {
+          // Join files of the same DPI
+          for (let file of files) {
+            const [_, name, dpi, ext] = /(.+?)@(.+?)(\..*)/.exec(file);
+            let key = name + ext;
+
+            node[key] = [...(node[key] || []), Number(dpi)];
+            node[key].getPath = function (DPI) {
+              let pathBuilder = [`${name}@${DPI}${ext}`];
+              let n = node;
+              while (n[parentSymbol]) {
+                pathBuilder.push(n[identitySymbol]);
+                n = n[parentSymbol];
+              }
+              return pathBuilder.reverse().join("/");
+            };
+          }
+        }
+
+        // Continue tree
+        const otherPaths = paths.filter((chunks) => chunks.length > 1);
+        const children = new Set(otherPaths.map((chunks) => chunks[0]));
+        children.forEach((path) =>
+          // Build tree for each path
+          treeBuilder(
+            otherPaths
+              .filter((chunks) => chunks[0] === path)
+              .map((chunks) => chunks.slice(1)),
+            getNextNode(path)
+          )
+        );
+      }
+
+      return node;
+    }
+
+    function treeCrawler(tree) {
+      for (let [key, val] of Object.entries(tree)) {
+        if (Array.isArray(val)) {
+          let card = document.getElementById("card").content.cloneNode(true);
+
+          const DPIs = val.sort((a, b) => a - b);
+          if (DPIs.length === 0)
+            throw new Error("Andrew is a bad programmer please fire him");
+          card.querySelector(".name").innerText = key;
+          for (let DPI of DPIs) {
+            let button = document
+              .getElementById("button")
+              .content.cloneNode(true);
+            button.querySelector("a").href = val.getPath(DPI); // build path
+            button.querySelector("div").innerText = DPI;
+            card.querySelector(".buttons").appendChild(button);
+          }
+
+          card.querySelector("img").src = val.getPath(
+            DPIs.find((v) => v > 100) || DPIs[0]
+          );
+
+          document.getElementById("container").appendChild(card);
+        } else {
+          treeCrawler(val);
+        }
+      }
+    }
+
+    fetch("files.txt")
+      .then((r) => r.text())
+      .then((data) => {
+        let files = data.split("\n").filter((l) => l);
+        let tree = treeBuilder(files);
+        console.log(JSON.stringify(tree, undefined, 2));
+
+        console.log("crawl");
+        treeCrawler(tree);
+      });
+  </script>
+</html>

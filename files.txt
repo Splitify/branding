@@ -1,0 +1,12 @@
+./textmark/textmark@300.png
+./textmark/textmark@72.png
+./textmark/textmark@150.png
+./banner/banner@150.png
+./banner/banner@72.png
+./banner/banner@300.png
+./logo/logo-greyscale@300.png
+./logo/logo-greyscale@150.png
+./logo/logo-greyscale@72.png
+./logo/logo@300.png
+./logo/logo@72.png
+./logo/logo@150.png
